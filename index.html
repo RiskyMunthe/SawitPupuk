@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#14532d">
+  <title>SawitPupuk — Kalkulator Pemupukan</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="authScreen" class="auth-wrap">
+    <div class="auth-card">
+      <div class="brand-mark">🌿</div>
+      <p class="eyebrow">ASISTEN PERKEBUNAN DIGITAL</p>
+      <h1 id="authTitle">Selamat datang di SawitPupuk</h1>
+      <p class="muted" id="authDescription">Daftar akun lokal untuk mulai menghitung kebutuhan dan biaya pemupukan kebun sawit.</p>
+      <form id="authForm">
+        <label for="fullName" id="nameLabel">Nama lengkap</label>
+        <input id="fullName" autocomplete="name" placeholder="Contoh: Budi Santoso" required>
+        <label for="email">Email / nama pengguna</label>
+        <input id="email" autocomplete="username" placeholder="Masukkan email atau username" required>
+        <label for="password">Kata sandi</label>
+        <input id="password" type="password" autocomplete="current-password" minlength="4" placeholder="Minimal 4 karakter" required>
+        <button class="btn primary full" id="authSubmit" type="submit">Daftar dan masuk</button>
+      </form>
+      <p class="auth-switch"><span id="switchText">Sudah punya akun?</span> <button type="button" class="text-button" id="switchAuth">Masuk</button></p>
+      <p class="tiny-note">Demo statis: akun dan catatan disimpan di browser/perangkat ini, bukan server online.</p>
+    </div>
+  </div>
+
+  <div id="appScreen" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark small">🌿</span><div><strong>SawitPupuk</strong><small>Asisten Pemupukan</small></div></div>
+      <nav>
+        <button class="nav-link active" data-view="dashboard">▦ <span>Dashboard</span></button>
+        <button class="nav-link" data-view="calculator">🧮 <span>Kalkulator Pupuk</span></button>
+        <button class="nav-link" data-view="records">▤ <span>Catatan Perhitungan</span></button>
+      </nav>
+      <div class="sidebar-tip"><strong>Catatan penting</strong><p>Gunakan dosis berdasarkan rekomendasi agronomis, hasil analisis tanah/daun, umur tanaman, dan kondisi kebun.</p></div>
+      <button id="logoutBtn" class="nav-link logout">↪ <span>Keluar akun</span></button>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div><p class="eyebrow">MANAJEMEN KEBUN</p><h1 id="pageTitle">Dashboard</h1></div>
+        <div class="user-chip"><span class="avatar" id="userAvatar">P</span><div><strong id="userName">Pengguna</strong><small>Pengelola kebun</small></div></div>
+      </header>
+
+      <section id="dashboardView" class="view">
+        <div class="hero">
+          <div><p class="hero-kicker">KEBUN LEBIH TERENCANA</p><h2>Hitung kebutuhan pupuk.<br><span>Rencanakan biaya dengan tepat.</span></h2><p>Catat hasil perhitungan pemupukan kelapa sawit dalam satu tempat.</p><button class="btn light" data-goto="calculator">Mulai menghitung <span>→</span></button></div>
+          <div class="hero-art" aria-hidden="true"><div class="sun"></div><div class="palm palm-one">🌴</div><div class="palm palm-two">🌴</div><div class="ground"></div></div>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-icon green">▤</div><p>Total catatan</p><h3 id="statRecords">0</h3><small>Perhitungan tersimpan</small></article>
+          <article class="stat-card"><div class="stat-icon gold">Rp</div><p>Total estimasi biaya</p><h3 id="statCost">Rp0</h3><small>Dari semua catatan</small></article>
+          <article class="stat-card"><div class="stat-icon blue">🌱</div><p>Total luas tercatat</p><h3 id="statArea">0 ha</h3><small>Akumulasi luas kebun</small></article>
+        </div>
+        <div class="section-heading"><div><h2>Catatan terbaru</h2><p>Riwayat perhitungan terakhir Anda</p></div><button class="text-button" data-goto="records">Lihat semua →</button></div>
+        <div id="recentRecords" class="records-list"></div>
+        <div class="disclaimer"><strong>⚠ Pengingat:</strong> Hasil kalkulator merupakan estimasi matematis berdasarkan input pengguna, bukan rekomendasi dosis agronomis. Pastikan dosis pupuk sesuai rekomendasi penyuluh/agronom dan hasil analisis tanah atau daun.</div>
+      </section>
+
+      <section id="calculatorView" class="view hidden">
+        <div class="intro-row"><div><h2>Kalkulator kebutuhan pupuk</h2><p>Isi informasi kebun, dosis, dan harga pupuk untuk menghitung estimasi kebutuhan serta biaya.</p></div><span class="pill">Estimasi per aplikasi</span></div>
+        <form id="calcForm" class="calc-layout">
+          <div class="form-panel">
+            <div class="panel-title"><span class="step">1</span><div><h3>Informasi kebun</h3><p>Identitas dasar lahan yang dihitung</p></div></div>
+            <div class="field-grid">
+              <div class="field full-field"><label for="recordName">Nama catatan / kebun</label><input id="recordName" placeholder="Contoh: Kebun Blok A" required></div>
+              <div class="field"><label for="area">Luas kebun (hektare)</label><div class="input-unit"><input id="area" type="number" min="0.01" step="0.01" placeholder="2.5" required><span>ha</span></div></div>
+              <div class="field"><label for="palmAge">Umur tanaman</label><select id="palmAge"><option value="TBM">TBM (belum menghasilkan)</option><option value="TM">TM (menghasilkan)</option></select></div>
+              <div class="field"><label for="palmCount">Jumlah pokok (opsional)</label><input id="palmCount" type="number" min="0" step="1" placeholder="Mis. 350"></div>
+              <div class="field"><label for="application">Aplikasi ke-</label><select id="application"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+            </div>
+            <div class="panel-title fertilizer-title"><span class="step">2</span><div><h3>Jenis dan dosis pupuk</h3><p>Masukkan dosis sesuai rekomendasi (kg/pokok/aplikasi)</p></div></div>
+            <div id="fertilizerRows" class="fertilizer-rows"></div>
+            <button type="button" id="addFertilizer" class="btn outline">＋ Tambah jenis pupuk</button>
+            <div class="field note-field"><label for="notes">Catatan tambahan (opsional)</label><textarea id="notes" rows="3" placeholder="Mis. kondisi lahan, sumber rekomendasi dosis, atau catatan pembelian."></textarea></div>
+          </div>
+          <aside class="result-panel">
+            <div class="result-top"><span class="result-label">ESTIMASI KEBUTUHAN</span><div class="result-leaf">🌿</div></div>
+            <p class="result-caption">Total kebutuhan pupuk</p><h2 id="totalKg">0 kg</h2>
+            <div class="result-divider"></div><p class="result-caption">Estimasi total biaya</p><h2 class="cost-value" id="totalCost">Rp0</h2>
+            <div id="breakdown" class="breakdown"><p class="muted">Isi dosis dan harga pupuk untuk melihat rincian.</p></div>
+            <button type="submit" class="btn primary full">Simpan perhitungan</button>
+            <button type="button" id="resetCalc" class="btn subtle full">Reset formulir</button>
+            <p class="tiny-note">Perhitungan menggunakan dosis kg/pokok × jumlah pokok. Jika jumlah pokok kosong, sistem memperkirakan 143 pokok/ha.</p>
+          </aside>
+        </form>
+      </section>
+
+      <section id="recordsView" class="view hidden">
+        <div class="intro-row"><div><h2>Catatan perhitungan</h2><p>Semua hasil yang disimpan pada browser/perangkat ini.</p></div><button class="btn primary" data-goto="calculator">＋ Perhitungan baru</button></div>
+        <div class="record-tools"><input id="searchRecords" placeholder="Cari nama kebun atau jenis pupuk…"><button class="btn outline" id="exportCsv">Ekspor CSV</button></div>
+        <div id="allRecords" class="records-list"></div>
+      </section>
+      <footer>© <span id="year"></span> SawitPupuk · Kalkulator estimasi pemupukan kelapa sawit</footer>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="js/app.js"></script>
+</body>
+</html>
